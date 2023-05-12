@@ -93,11 +93,11 @@ public class ProcyonDecompiler implements Decompiler {
 		new Java8Generics().run(source);
 		new InvalidIdentifierFix().run(source);
 
-		if (settings.removeImports) {
+		if (settings.removeImports()) {
 			DropImportAstTransform.INSTANCE.run(source);
 		}
 
-		if (settings.removeVariableFinal) {
+		if (settings.removeVariableFinal()) {
 			DropVarModifiersAstTransform.INSTANCE.run(source);
 		}
 

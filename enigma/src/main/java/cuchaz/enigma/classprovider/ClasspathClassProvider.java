@@ -2,6 +2,8 @@ package cuchaz.enigma.classprovider;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.Collections;
 
 import javax.annotation.Nullable;
 
@@ -26,5 +28,10 @@ public class ClasspathClassProvider implements ClassProvider {
 		} catch (IOException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public Collection<String> getClassNames() {
+		return Collections.emptyList();
 	}
 }

@@ -1,8 +1,12 @@
 package cuchaz.enigma.classprovider;
 
-import javax.annotation.Nullable;
-
 import org.objectweb.asm.tree.ClassNode;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Combines a list of {@link ClassProvider}s into one, calling each one in a row
@@ -18,7 +22,7 @@ public class CombiningClassProvider implements ClassProvider {
 	@Override
 	@Nullable
 	public ClassNode get(String name) {
-		for (ClassProvider cp : classProviders) {
+		for (ClassProvider cp : this.classProviders) {
 			ClassNode node = cp.get(name);
 
 			if (node != null) {
@@ -27,5 +31,20 @@ public class CombiningClassProvider implements ClassProvider {
 		}
 
 		return null;
+	}
+
+	@Override
+	public Collection<String> getClassNames() {
+		return Arrays.stream(this.classProviders).flatMap(c -> c.getClassNames().stream()).toList();
+	}
+
+	@Override
+	public List<String> getClasses(String className) {
+		List<String> classes = new ArrayList<>();
+		for (ClassProvider cp : this.classProviders) {
+			classes.addAll(cp.getClasses(className));
+		}
+
+		return classes;
 	}
 }

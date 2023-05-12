@@ -86,14 +86,8 @@ public class Main {
 					case "no-edit-fields" -> editables.remove(EditableType.FIELD);
 					case "edit-parameters" -> editables.add(EditableType.PARAMETER);
 					case "no-edit-parameters" -> editables.remove(EditableType.PARAMETER);
-					case "edit-locals" -> {
-						editables.add(EditableType.LOCAL_VARIABLE);
-						System.err.println("warning: --edit-locals has no effect as local variables are currently not editable");
-					}
-					case "no-edit-locals" -> {
-						editables.remove(EditableType.LOCAL_VARIABLE);
-						System.err.println("warning: --no-edit-locals has no effect as local variables are currently not editable");
-					}
+					case "edit-locals" -> editables.add(EditableType.LOCAL_VARIABLE);
+					case "no-edit-locals" -> editables.remove(EditableType.LOCAL_VARIABLE);
 					case "edit-javadocs" -> editables.add(EditableType.JAVADOC);
 					case "no-edit-javadocs" -> editables.remove(EditableType.JAVADOC);
 					}

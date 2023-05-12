@@ -162,8 +162,6 @@ public class EnigmaProject {
 					}
 				}
 			}
-		} else if (obfEntry instanceof LocalVariableEntry && !((LocalVariableEntry) obfEntry).isArgument()) {
-			return false;
 		}
 
 		return this.jarIndex.getEntryIndex().hasEntry(obfEntry);
@@ -274,7 +272,7 @@ public class EnigmaProject {
 			progress.init(classes.size(), I18n.translate("progress.classes.decompiling"));
 
 			//create a common instance outside the loop as mappings shouldn't be changing while this is happening
-			Decompiler decompiler = decompilerService.create(compiled::get, new SourceSettings(false, false));
+			Decompiler decompiler = decompilerService.create(ClassProvider.fromMap(this.compiled), new SourceSettings(false, false));
 
 			AtomicInteger count = new AtomicInteger();
 

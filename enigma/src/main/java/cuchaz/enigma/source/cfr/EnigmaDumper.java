@@ -99,7 +99,7 @@ public class EnigmaDumper extends StringStreamDumper {
 
 	@Override
 	public Dumper packageName(JavaRefTypeInstance t) {
-		if (sourceSettings.removeImports) {
+		if (sourceSettings.removeImports()) {
 			return this;
 		}
 
@@ -108,7 +108,7 @@ public class EnigmaDumper extends StringStreamDumper {
 
 	@Override
 	public Dumper keyword(String s) {
-		if (sourceSettings.removeImports && s.startsWith("import")) {
+		if (sourceSettings.removeImports() && s.startsWith("import")) {
 			muteLine = true;
 			return this;
 		}
