@@ -31,9 +31,9 @@ subprojects {
 	}
 
 	group = 'cuchaz'
-	version = '2.3.2'
+	version = '2.3.1'
 
-	version = version + (System.getenv("GITHUB_ACTIONS") ? "" : "+local")
+	version = version + (System.getenv("GITHUB_ACTIONS") || System.getenv("JITPACK") ? "" : "+local")
 
 	task sourcesJar(type: Jar, dependsOn: classes) {
 		classifier = 'sources'
