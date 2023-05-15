@@ -213,6 +213,8 @@ public enum EnigmaMappingsReader implements MappingsReader {
 			return parseMethod(parentEntry, tokens);
 		case EnigmaFormat.PARAMETER:
 			return parseArgument(parentEntry, tokens);
+		case EnigmaFormat.VAR:
+			return parseLocalVariable(parentEntry, tokens);
 		case EnigmaFormat.COMMENT:
 			readJavadoc(parent, tokens);
 			return null;
@@ -346,6 +348,18 @@ public enum EnigmaMappingsReader implements MappingsReader {
 
 		MethodEntry ownerEntry = (MethodEntry) parent;
 		LocalVariableEntry obfuscatedEntry = new LocalVariableEntry(ownerEntry, Integer.parseInt(tokens[1]), "", true, null);
+		String mapping = tokens[2];
+
+		return new MappingPair<>(obfuscatedEntry, new RawEntryMapping(mapping));
+	}
+
+	private static MappingPair<LocalVariableEntry, RawEntryMapping> parseLocalVariable(@Nullable Entry<?> parent, String[] tokens) {
+		if (!(parent instanceof MethodEntry)) {
+			throw new RuntimeException("Local variable must be a child of a method!");
+		}
+
+		MethodEntry ownerEntry = (MethodEntry) parent;
+		LocalVariableEntry obfuscatedEntry = new LocalVariableEntry(ownerEntry, Integer.parseInt(tokens[1]), "", false, null);
 		String mapping = tokens[2];
 
 		return new MappingPair<>(obfuscatedEntry, new RawEntryMapping(mapping));
