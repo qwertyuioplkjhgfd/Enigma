@@ -34,6 +34,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Highlighter.HighlightPainter;
 
+import com.formdev.flatlaf.extras.components.FlatScrollPane;
+import com.formdev.flatlaf.ui.FlatScrollPaneUI;
 import de.sciss.syntaxpane.DefaultSyntaxKit;
 
 import cuchaz.enigma.EnigmaProject;
@@ -68,8 +70,13 @@ import cuchaz.enigma.utils.Result;
 
 public class EditorPanel {
 	private final JPanel ui = new JPanel();
-	private final JEditorPane editor = new JEditorPane();
-	private final JScrollPane editorScrollPane = new JScrollPane(this.editor);
+	private final JEditorPane editor = new JEditorPane() {
+		@Override
+		public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+			return this.getFontMetrics(this.getFont()).getHeight();
+		}
+	};
+	private final FlatScrollPane editorScrollPane = new FlatScrollPane();
 	private final EditorPopupMenu popupMenu;
 
 	// progress UI
@@ -116,12 +123,16 @@ public class EditorPanel {
 		this.editor.setCaretColor(UiConfig.getCaretColor());
 		this.editor.setContentType("text/enigma-sources");
 		this.editor.setBackground(UiConfig.getEditorBackgroundColor());
+//		this.editor.setUnitIncrement(16);
 		DefaultSyntaxKit kit = (DefaultSyntaxKit) this.editor.getEditorKit();
 		kit.toggleComponent(this.editor, "de.sciss.syntaxpane.components.TokenMarker");
 
 		// set unit increment to height of one line, the amount scrolled per
 		// mouse wheel rotation is then controlled by OS settings
-		this.editorScrollPane.getVerticalScrollBar().setUnitIncrement(this.editor.getFontMetrics(this.editor.getFont()).getHeight());
+		this.editorScrollPane.setViewportView(this.editor);
+		this.editorScrollPane.setSmoothScrolling(true);
+		FlatScrollPaneUI flatScrollPaneUI = new FlatScrollPaneUI();
+		flatScrollPaneUI.installUI(this.editorScrollPane);
 
 		// init editor popup menu
 		this.popupMenu = new EditorPopupMenu(this, gui);
